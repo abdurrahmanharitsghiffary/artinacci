@@ -1,0 +1,173 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  fullName     String        @db.VarChar(150)
+  username     String        @unique @db.VarChar(125)
+  password     String
+  isVerified   Boolean       @default(true)
+  identifier   String        @unique @db.VarChar(150)
+  avatarUrl    String?
+  providerId   String?       @unique
+  providerType ProviderType?
+  contents     Content[]
+  tokens       Token[]
+  invoices     Invoice[]
+  role         UserRole      @default(MEMBER)
+
+  membership   Membership? @relation(fields: [membershipId], references: [id])
+  membershipId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  MEMBER
+}
+
+model Code {
+  id Int @id @default(autoincrement())
+
+  code String @unique
+
+  token     Token @relation(fields: [tokenId], references: [id], onDelete: Cascade)
+  tokenId   Int
+  expiresAt Int   @default(3600)
+
+  @@map("codes")
+}
+
+model Content {
+  id          Int         @id @default(autoincrement())
+  title       String?
+  content     String?     @db.Text
+  type        ContentType
+  attachments String[]
+
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@map("contents")
+}
+
+model Token {
+  id    Int       @id @default(autoincrement())
+  token String    @unique
+  type  TokenType
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  codes  Code[]
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@map("tokens")
+}
+
+model Membership {
+  id Int @id @default(autoincrement())
+
+  type              MembershipType
+  maxContentPerType Int?
+  users             User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("memberships")
+}
+
+model Invoice {
+  id      String        @id @default(uuid())
+  status  InvoiceStatus
+  amount  Int
+  charges Charge[]
+  items   OrderItem[]
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("invoices")
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  name     String
+  price    Int
+  quantity Int
+
+  Invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order_items")
+}
+
+model Charge {
+  id     Int        @id @default(autoincrement())
+  type   ChargeType
+  amount Int
+
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId String
+
+  @@map("charges")
+}
+
+enum ChargeType {
+  SERVICE_CHARGE
+  TAX
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PAID
+}
+
+enum TokenType {
+  ACCESS_TOKEN
+  VERIFY_TOKEN
+  RESET_TOKEN
+}
+
+enum ContentType {
+  ARTICLE
+  VIDEO
+}
+
+enum MembershipType {
+  A
+  B
+  C
+}
+
+enum ProviderType {
+  GOOGLE
+  FACEBOOK
+}

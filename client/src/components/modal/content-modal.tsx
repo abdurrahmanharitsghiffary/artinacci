@@ -10,7 +10,8 @@ type ContentModalProps = {
 export function ContentModal({ content, isOpen, onClose }: ContentModalProps) {
   return (
     <Modal
-      size="lg"
+      // @ts-expect-error
+      size="md"
       show={isOpen}
       onHide={onClose}
       aria-labelledby="contained-modal-title-vcenter"

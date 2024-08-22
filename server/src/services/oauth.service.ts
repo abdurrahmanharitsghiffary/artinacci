@@ -45,7 +45,16 @@ export class OAuthService {
       try {
         console.log(profile, 'Profile');
         let email = profile.emails?.[0]?.value;
-        const displayName = profile?.displayName ?? '';
+        let displayName = profile?.displayName ?? '';
+
+        if (providerType === 'FACEBOOK') {
+          const givenName = profile?.name?.givenName ?? '';
+          const familyName = profile?.name?.familyName ?? '';
+          const middleName = profile?.name?.middleName ?? '';
+          displayName = givenName;
+          if (middleName) displayName += ' ' + middleName;
+          if (familyName) displayName += ' ' + familyName;
+        }
 
         if (!email)
           throw new OAuthVerifyException(

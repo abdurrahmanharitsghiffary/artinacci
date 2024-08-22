@@ -120,7 +120,7 @@ model OrderItem {
   price    Int
   quantity Int
 
-  Invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  Invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   invoiceId String
 
   createdAt DateTime @default(now())
@@ -134,7 +134,7 @@ model Charge {
   type   ChargeType
   amount Int
 
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   invoiceId String
 
   @@map("charges")

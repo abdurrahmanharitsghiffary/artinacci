@@ -17,10 +17,10 @@ export class Handler {
     return this.tryCatch(instance[key]);
   }
 
-  static tryCatch(controller: AppHandler<any>) {
+  static tryCatch(handler: AppHandler<any>) {
     return async (req: AppRequest, res: AppResponse, next: NextFunction) => {
       try {
-        await controller(req, res, next);
+        await handler(req, res, next);
       } catch (err) {
         next(err);
       }

@@ -20,6 +20,19 @@
   .text-balance {
     text-wrap: balance;
   }
+  .read-more {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    line-clamp: 5;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+  }
+  .link-no-styled {
+    text-decoration: none;
+    color: black;
+  }
   .hide-scrollbar {
     -ms-overflow-style: none; /* Internet Explorer 10+ */
     scrollbar-width: none; /* Firefox */

@@ -2,6 +2,7 @@ import { Application } from 'express';
 
 import contentRouter from './content.router';
 import meRouter from './me.router';
+import transactionRouter from './transaction.router';
 import authRouter from './auth.router';
 import oauthRouter from './oauth.router';
 
@@ -14,6 +15,7 @@ export const routerV1 = (app: Application) => {
   app.use(baseV1Url + '/oauth', oauthRouter);
   app.use(baseV1Url + '/contents', contentRouter);
   app.use(baseV1Url + '/me', meRouter);
+  app.use(baseV1Url + '/', transactionRouter);
 
   app.use(ErrorMiddleware.handle);
 };

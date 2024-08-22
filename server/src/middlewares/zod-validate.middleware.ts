@@ -7,7 +7,6 @@ export class ZodValidateMiddleware {
   static validateBody(zodSchema: ZodSchema<any>) {
     return Handler.tryCatch(
       async (req: AppRequest, res: AppResponse, next: NextFunction) => {
-        console.log(zodSchema, 'Zod Schema is Working!');
         await zodSchema.parseAsync(req.body);
         next();
       }

@@ -7,7 +7,7 @@ import Providers from "./providers";
 const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {
-  title: "ArtiNacci",
+  title: "Artinacci",
 };
 
 export default function RootLayout({

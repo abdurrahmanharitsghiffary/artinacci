@@ -1,4 +1,5 @@
 "use client";
+import { useCheckoutPlan } from "@/hooks/api/checkout-plan";
 import { useGetProfile } from "@/hooks/api/get-profile";
 import { useUpgradePlan } from "@/hooks/api/upgrade-plan";
 import Link from "next/link";
@@ -16,30 +17,34 @@ type PlanKey = keyof typeof planMapping;
 
 export default function PlanSelection() {
   const { data } = useGetProfile();
-  const { mutateAsync } = useUpgradePlan();
+  // const { mutateAsync } = useUpgradePlan();
+  const { mutateAsync } = useCheckoutPlan();
 
   const membershipType = data?.data?.membership?.type ?? "A";
 
-  const getPlanButtonLabel = (planType: PlanKey) => {
-    return planMapping[planType] >= planMapping[membershipType as PlanKey]
-      ? "Choose plan"
-      : "Downgrade plan";
-  };
+  // const getPlanButtonLabel = (planType: PlanKey) => {
+  //   return planMapping[planType] >= planMapping[membershipType as PlanKey]
+  //     ? "Choose plan"
+  //     : "Downgrade plan";
+  // };
 
-  const getIsUpgradeAndDowngradeAvailable = (planType: PlanKey) => {
-    return planMapping[planType] !== planMapping[membershipType as PlanKey];
-  };
-
-  const handleBasicPlanSelect = async () => {
-    await mutateAsync({ planType: "A" });
+  const getIsUpgradeAvailable = (planType: PlanKey) => {
+    return (
+      planMapping[planType] > planMapping[membershipType as PlanKey] &&
+      planMapping[planType] !== planMapping[membershipType as PlanKey]
+    );
   };
 
   const handleMemberPlanSelect = async () => {
-    await mutateAsync({ planType: "B" });
+    const data = await mutateAsync({ type: "B" });
+    // @ts-expect-error
+    if (window?.snap) window.snap.pay(data?.data?.data?.token);
   };
 
   const handleCreatorPlanSelect = async () => {
-    await mutateAsync({ planType: "C" });
+    const data = await mutateAsync({ type: "C" });
+    // @ts-expect-error
+    if (window?.snap) window.snap.pay(data?.data?.data?.token);
   };
 
   return (
@@ -56,15 +61,6 @@ export default function PlanSelection() {
               videos. Perfect for those exploring our content for the first
               time.
             </Card.Text>
-            {getIsUpgradeAndDowngradeAvailable("A") && (
-              <Button
-                variant="primary"
-                className="mt-auto"
-                onClick={handleBasicPlanSelect}
-              >
-                {getPlanButtonLabel("A")}
-              </Button>
-            )}
           </Card.Body>
           <Card.Footer className="bg-white text-muted flex flex-col gap-2 px-4 text-sm">
             <Card.Text className="!flex gap-2 items-center">
@@ -86,18 +82,18 @@ export default function PlanSelection() {
             <Card.Title className="!font-bold">
               Member {membershipType === "B" && "(Current)"}
             </Card.Title>
-            <Card.Title>$10/month</Card.Title>
+            <Card.Title>$10</Card.Title>
             <Card.Text>
               Unlock access to up to 10 exclusive articles and videos. Perfect
               for casual learners.
             </Card.Text>
-            {getIsUpgradeAndDowngradeAvailable("B") && (
+            {getIsUpgradeAvailable("B") && (
               <Button
                 variant="primary"
                 className="mt-auto"
                 onClick={handleMemberPlanSelect}
               >
-                {getPlanButtonLabel("B")}
+                Upgrade Plan
               </Button>
             )}
           </Card.Body>
@@ -126,18 +122,18 @@ export default function PlanSelection() {
             <Card.Title className="!font-bold">
               Creator {membershipType === "C" && "(Current)"}
             </Card.Title>
-            <Card.Title>$20/month</Card.Title>
+            <Card.Title>$20</Card.Title>
             <Card.Text>
               Enjoy unlimited access to all content and exclusive creator tools.
               Ideal for serious enthusiasts and content creators.
             </Card.Text>
-            {getIsUpgradeAndDowngradeAvailable("C") && (
+            {getIsUpgradeAvailable("C") && (
               <Button
                 variant="primary"
                 className="mt-auto"
                 onClick={handleCreatorPlanSelect}
               >
-                {getPlanButtonLabel("C")}
+                Upgrade Plan
               </Button>
             )}
           </Card.Body>

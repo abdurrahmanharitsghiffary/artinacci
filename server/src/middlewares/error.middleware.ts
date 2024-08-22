@@ -3,6 +3,8 @@ import {
   HttpException,
   OAuthVerifyException,
   ZodValidateBodyException,
+  ZodValidateParamsException,
+  ZodValidateQueryException,
 } from '@app/utils/http-exception';
 import { HttpResponse } from '@app/utils/http-response';
 import { NextFunction } from 'express';
@@ -24,6 +26,10 @@ export class ErrorMiddleware {
       let message = 'Failed to validate request input';
       if (err instanceof ZodValidateBodyException) {
         message = 'Failed to validate request body.';
+      } else if (err instanceof ZodValidateQueryException) {
+        message = 'Failed to validate query params.';
+      } else if (err instanceof ZodValidateParamsException) {
+        message = 'Failed to validate params.';
       }
 
       return res

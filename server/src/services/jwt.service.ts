@@ -10,7 +10,9 @@ export class JwtService {
 
   static sign(payload: string | Buffer | object) {
     return new Promise<string>((resolve) => {
-      const token = jwt.sign(payload, process.env.JWT_SECRET ?? '');
+      const token = jwt.sign(payload, process.env.JWT_SECRET ?? '', {
+        expiresIn: '7d',
+      });
       resolve(token);
     });
   }

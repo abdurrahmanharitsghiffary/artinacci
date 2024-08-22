@@ -8,6 +8,8 @@ import Form from "react-bootstrap/Form";
 import { FcGoogle } from "react-icons/fc";
 import { ImFacebook2 } from "react-icons/im";
 import { useLoginForm } from "@/hooks/validator/use-login-form";
+import GoogleLogin from "@/components/button/google-login";
+import FacebookLogin from "@/components/button/facebook-login";
 
 export default function LoginForm() {
   const {
@@ -23,6 +25,9 @@ export default function LoginForm() {
       onSubmit={handleSubmit}
     >
       <p className="text-center">Welcome, please login to your account.</p>
+      <GoogleLogin />
+      <FacebookLogin />
+      <Divider>or</Divider>
       <Form.Group controlId="loginForm.Email" className="w-full">
         <Form.Label className="font-semibold">Email address</Form.Label>
         <Form.Control
@@ -50,30 +55,6 @@ export default function LoginForm() {
       <Button className="w-full !rounded-full" type="submit">
         Login
       </Button>
-      <Divider>or</Divider>
-      <Link
-        href={`${process.env.NEXT_PUBLIC_API_URL}/oauth/google`}
-        className="w-full no-underline"
-      >
-        <Button
-          className="w-full !flex justify-center gap-2 items-center !rounded-full"
-          variant="light"
-        >
-          <FcGoogle size={20} /> Continue with Google
-        </Button>
-      </Link>
-      <Link
-        href={`${process.env.NEXT_PUBLIC_API_URL}/oauth/facebook`}
-        className="w-full no-underline"
-      >
-        <Button
-          className="w-full !flex justify-center gap-2 items-center !rounded-full"
-          variant="light"
-        >
-          <ImFacebook2 size={20} />
-          Continue with Facebook
-        </Button>
-      </Link>
       <p>
         Don&apos;t have an account?{" "}
         <Link href="/auth/register">Register Here</Link>

@@ -3,7 +3,7 @@ import LoginForm from "./login-form";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Login | ArtiNacci",
+  title: "Login | Artinacci",
 };
 
 export default function Page() {

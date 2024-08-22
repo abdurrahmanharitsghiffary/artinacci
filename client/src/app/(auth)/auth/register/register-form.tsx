@@ -1,5 +1,7 @@
 "use client";
 
+import FacebookLogin from "@/components/button/facebook-login";
+import GoogleLogin from "@/components/button/google-login";
 import Divider from "@/components/divider";
 import { useRegisterForm } from "@/hooks/validator/use-register-form";
 import Link from "next/link";
@@ -25,6 +27,9 @@ export default function RegisterForm() {
       <p className="text-center">
         Become a member and start your journey with us. Register now!
       </p>
+      <GoogleLogin />
+      <FacebookLogin />
+      <Divider>or</Divider>
       <Form.Group controlId="loginForm.FullName" className="w-full">
         <Form.Label className="font-semibold">Fullname</Form.Label>
         <Form.Control
@@ -76,30 +81,6 @@ export default function RegisterForm() {
       <Button className="w-full !rounded-full" type="submit">
         Register
       </Button>
-      <Divider>or</Divider>
-      <Link
-        href={`${process.env.NEXT_PUBLIC_API_URL}/oauth/google`}
-        className="w-full no-underline"
-      >
-        <Button
-          className="w-full !flex justify-center gap-2 items-center !rounded-full"
-          variant="light"
-        >
-          <FcGoogle size={20} /> Continue with Google
-        </Button>
-      </Link>
-      <Link
-        href={`${process.env.NEXT_PUBLIC_API_URL}/oauth/facebook`}
-        className="w-full no-underline"
-      >
-        <Button
-          className="w-full !flex justify-center gap-2 items-center !rounded-full"
-          variant="light"
-        >
-          <ImFacebook2 size={20} />
-          Continue with Facebook
-        </Button>
-      </Link>
       <p>
         Already have an account? <Link href="/auth/login">Login Here</Link>
       </p>

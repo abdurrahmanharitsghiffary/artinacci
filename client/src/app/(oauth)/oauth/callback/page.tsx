@@ -16,7 +16,8 @@ export default function Page() {
       authServiceApi
         .verifyCode({ code })
         .then((res) => {
-          if (res?.data?.accessToken) setAccessToken(res?.data?.accessToken);
+          const data = res?.data?.data;
+          if (data?.accessToken) setAccessToken(data?.accessToken);
           router.push("/home");
         })
         .catch((err) => {

@@ -6,7 +6,7 @@ type State = {
 };
 
 type Actions = {
-  setAccessToken: (accessToken: string) => void;
+  setAccessToken: (accessToken: string | null) => void;
 };
 
 export const useSessionStore = create(
